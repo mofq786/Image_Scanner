@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Text Extractor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        .file-input {
+            margin: 20px 0;
+        }
+        .result {
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Extract Text from Image</h1>
+    <form id="upload-form">
+        <div class="file-input">
+            <input type="file" id="file-input" accept="image/*" required>
+        </div>
+        <button type="submit">Upload and Extract Text</button>
+    </form>
+
+    <div class="result" id="result">
+        <h3>Extracted Text:</h3>
+        <pre id="extracted-text"></pre>
+    </div>
+</div>
+
+<script>
+    document.getElementById("upload-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+        
+        const fileInput = document.getElementById("file-input");
+        const file = fileInput.files[0];
+
+        if (file) {
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch("http://localhost:8080/api/textract/extract", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(text => {
+                document.getElementById("extracted-text").textContent = text;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred while extracting text.");
+            });
+        }
+    });
+</script>
+
+</body>
+</html>
+
+
+
+<!-- DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Scanner</title>
+    <script src="scripts.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+        <h1>Image Scanner</h1>
+    <div class="container">
+        <form id="imageUploadForm">
+            <label for="file">Upload an Image</label>
+            <input type="file" id="file" name="file" accept="image/*" required>
+            <button type="submit">Upload</button>
+        </form>
+        <div id="loading" style="display:none;">Processing...</div>
+        <div id="output" style="display: none;">
+            <h2>Extracted Text:</h2>
+            <p id="extractedText"></p>
+        </div>
+        <div id="error" style="color: red; display: none;">Error uploading file. Please try again.</div>
+    </div>
+
+</body>
+</html>
+-->
